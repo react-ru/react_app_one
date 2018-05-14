@@ -1,0 +1,328 @@
+@fontFamily: 'Roboto';
+@fontColorBright: #e49380;
+@fontColorDark: #4e6973;
+
+
+.WW {
+    background: #fff;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .arrow {
+        cursor: pointer;
+
+        width: 29px;
+        height: 29px;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSI0MDgiIGhlaWdodD0iNDA4IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA0MDggNDA4OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHJlY3QgaWQ9ImJhY2tncm91bmRyZWN0IiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4PSIwIiB5PSIwIiBmaWxsPSJub25lIiBzdHJva2U9Im5vbmUiLz48ZyBjbGFzcz0iY3VycmVudExheWVyIiBzdHlsZT0iIj48dGl0bGU+TGF5ZXIgMTwvdGl0bGU+PGcgaWQ9InN2Z18xIiBjbGFzcz0ic2VsZWN0ZWQiIHN0cm9rZT0ibm9uZSIgZmlsbD0iIzRlNjk3MyIgZmlsbC1vcGFjaXR5PSIxIj48ZyBpZD0iYXJyb3ctYmFjayIgc3Ryb2tlPSJub25lIiBmaWxsPSIjNGU2OTczIiBmaWxsLW9wYWNpdHk9IjEiPjxwYXRoIGQ9Ik00MDgsMTc4LjVIOTYuOUwyMzkuNywzNS43TDIwNCwwTDAsMjA0bDIwNCwyMDRsMzUuNy0zNS43TDk2LjksMjI5LjVINDA4VjE3OC41eiIgaWQ9InN2Z18yIiBzdHJva2U9Im5vbmUiIGZpbGw9IiM0ZTY5NzMiIGZpbGwtb3BhY2l0eT0iMSIvPjwvZz48L2c+PGcgaWQ9InN2Z18zIj48L2c+PGcgaWQ9InN2Z180Ij48L2c+PGcgaWQ9InN2Z181Ij48L2c+PGcgaWQ9InN2Z182Ij48L2c+PGcgaWQ9InN2Z183Ij48L2c+PGcgaWQ9InN2Z184Ij48L2c+PGcgaWQ9InN2Z185Ij48L2c+PGcgaWQ9InN2Z18xMCI+PC9nPjxnIGlkPSJzdmdfMTEiPjwvZz48ZyBpZD0ic3ZnXzEyIj48L2c+PGcgaWQ9InN2Z18xMyI+PC9nPjxnIGlkPSJzdmdfMTQiPjwvZz48ZyBpZD0ic3ZnXzE1Ij48L2c+PGcgaWQ9InN2Z18xNiI+PC9nPjxnIGlkPSJzdmdfMTciPjwvZz48L2c+PC9zdmc+);
+        background-size: 100% 100%;
+    }
+
+    .WW_table {
+        position: absolute;
+
+        left: 100%;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+        transition: left ease .4s;
+
+
+        &.WW_table__active {
+            left: 0;
+        }
+
+        .WW_row {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+
+            &.WW_row__justify {
+                justify-content: space-between;
+            }
+        }
+
+        .WW_cell {
+
+
+            position: relative;
+
+            &.WW_cell__full {
+
+            }
+
+            &.WW_cell__city {
+                padding: 40px 0 35px 118px;
+
+
+                .WW_city-change {
+
+                    display: block;
+                    position: absolute;
+                    left: 50px;
+                    top: 53px;
+
+                    .arrow;
+                }
+
+                .WW_city-name {
+                    font: 500 48px @fontFamily;
+                    color: @fontColorDark;
+                    display: block;
+                }
+
+            }
+
+            &.WW_cell__switcher {
+
+                .WW_switcher {
+
+                    width: 89px;
+                    height: 29px;
+
+                    border: 1px solid @fontColorDark;
+                    border-radius: 30px;
+
+                    margin: 52px 41px 0 0;
+                    position: relative;
+
+                    overflow: hidden;
+                    cursor: pointer;
+
+                    .WW_switcher_lever {
+
+                        width: 33px;
+                        height: 29px;
+                        box-sizing: border-box;
+                        border: 1px solid @fontColorDark;
+                        border-radius: 30px;
+
+                        position: absolute;
+                        right: 56px;
+                        top: 0;
+
+                        transition: right ease .2s;
+
+                        .wi {
+                            display: block;
+                            position: absolute;
+                            top: 7px;
+                            font: 19px/1 'weathericons';
+
+                            color: @fontColorDark;
+
+
+                            &.wi-celsius {
+                                left: -35px;
+                            }
+                            &.wi-fahrenheit {
+                                right: -35px;
+                            }
+                        }
+
+                    }
+
+                    &.WW_switcher__active .WW_switcher_lever {
+                        right: 0;
+                    }
+                }
+
+            }
+
+
+            .WW_date-string {
+                display: block;
+                padding: 28px 0 10px 38px;
+
+                font: 300 46px/1 @fontFamily;
+                color: @fontColorDark;
+                letter-spacing: .5px;
+            }
+
+            .WW_weather-description {
+                padding: 15px 0 10px 40px;
+
+                font: 300 37px/1 @fontFamily;
+                color: @fontColorDark;
+                letter-spacing: .5px;
+            }
+
+            &.WW_cell__degrees {
+                align-self: flex-start;
+                padding: 24px 110px 10px 35px;
+
+                font: 140px/1 @fontFamily;
+                color: @fontColorBright;
+
+                position: relative;
+
+                i {
+                    font-size: 200px;
+
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+
+
+                }
+            }
+            &.WW_cell__weather-icon {
+
+                align-self: flex-start;
+
+                color: @fontColorBright;
+                font-size: 150px;
+
+                //padding: 0 0 0 100px;
+                padding: 0 0 0 50px;
+
+            }
+
+            &.WW_cell__during-the-day {
+
+                padding: 25px 0 0 100px;
+
+                .WW__during-the-day_row {
+                    display: flex;
+                    padding: 0 0 12px 0;
+                    color: @fontColorBright;
+                    font: 300 24px @fontFamily;
+                    line-height: 1;
+
+                    .WW__during-the-day_name {
+                        width: 140px;
+                    }
+                    .WW__during-the-day_temp {
+                    }
+                }
+
+            }
+
+            &.WW_cell__daily {
+
+                flex-grow: 1;
+                text-align: center;
+                padding-top: 55px;
+                color: @fontColorDark;
+
+
+                .WW_daily-weekday {
+                    font-size: 18px;
+                }
+
+                .WW_daily-icon {
+                    font-size: 45px;
+                    margin: 16px 0 0 0;
+                }
+
+                .WW_daily-temp {
+                    font-size: 16px;
+                    margin: 22px 0 0 0;
+                }
+            }
+
+        }
+    }
+
+
+    .WW_overlay {
+        position: absolute;
+        left: -100%;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+        background: #fff;
+        -webkit-box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.5);
+        -moz-box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.5);
+        box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.5);
+
+        transition: left ease .4s;
+
+        &.WW_overlay__active {
+            left: 0;
+        }
+
+        .WW_overlay_return {
+
+            position: absolute;
+            top: 53px;
+            right: 50px;
+
+            .arrow;
+            transform: rotate(180deg);
+
+            &.hidden {
+                display: none;
+            }
+        }
+
+        .WW_overlay_city {
+            position: relative;
+            width: 50%;
+            margin: 250px auto 0;
+
+            .WW_autocomplete-input {
+
+                font: 700 50px @fontFamily, 'Arial';
+                color: @fontColorDark;
+                text-align: center;
+
+                display: block;
+                width: 100%;
+
+                border: none;
+                border-bottom: 1px solid @fontColorDark;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            .WW_autocomplete-drop {
+                border: 1px solid @fontColorDark;
+                box-sizing: border-box;
+                color: @fontColorDark;
+
+                .WW_autocomplete-drop_item {
+
+                    color: #000;
+                    padding: 2px 5px;
+                    cursor: pointer;
+
+                    &.WW_autocomplete-drop_item__active {
+                        color: @fontColorBright;
+                    }
+                }
+
+            }
+
+            .WW_overlay_current-position {
+                text-align: center;
+
+                span {
+                    display: block;
+                    font: 24px @fontFamily, 'Arial';
+                    color: @fontColorDark;
+
+                    &:first-child {
+                        padding: 35px 0 20px;
+                        font-size: 20px;
+                    }
+
+                    a {
+                        display: inline-block;
+                        border-bottom: 1px dashed @fontColorDark;
+                        cursor: pointer;
+
+                        &:hover {
+                            opacity: .8;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
