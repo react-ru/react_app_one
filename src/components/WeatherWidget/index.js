@@ -41,6 +41,7 @@ class WeatherWidget extends PureComponent {
         this.setState(appState);
 
         this.sePeriodEndTimer();
+        this.setDayEndTimer();
 
         this.initApp();
 
@@ -446,8 +447,6 @@ class WeatherWidget extends PureComponent {
                     citySelect: false
                 });
 
-                this.setDayEndTimer();
-
             },
             error => console.log(error)
         );
@@ -555,7 +554,12 @@ class WeatherWidget extends PureComponent {
 
         let now = new Date();
 
-        setTimeout( () => this.requestAppData(this.state), new Date(now.getFullYear(), now.getMonth(), now.getDate()+1) - now);
+        setTimeout( () => {
+
+            this.requestAppData(this.state);
+            this.setDayEndTimer();
+
+        }, new Date(now.getFullYear(), now.getMonth(), now.getDate()+1) - now);
 
     };
 
