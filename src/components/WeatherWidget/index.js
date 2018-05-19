@@ -49,17 +49,17 @@ class WeatherWidget extends PureComponent {
 
     render() {
 
-        let weather = this.state.weather;
+        const weather = this.state.weather;
 
-        let today = weather && weather[this.state.currentDayNumber],
+        const today = weather && weather[this.state.currentDayNumber],
             now = new Date(),
             nowHours = Math.floor(now.getHours()/3);
 
-        let currentDescription = weather && today.description;
-        let currentTemp = weather && today.weather.byHours[nowHours].temp;
-        let currentIcon = weather && iconsDictionary[today.weather.byHours[nowHours].icon];
+        const currentDescription = weather && today.description;
+        const currentTemp = weather && today.weather.byHours[nowHours].temp;
+        const currentIcon = weather && iconsDictionary[today.weather.byHours[nowHours].icon];
 
-        let weatherList = weather && weather
+        const weatherList = weather && weather
             .map(daily =>
                 <div key = { Math.random().toString(36).substr(2, 9) } className="WW_cell WW_cell__daily">
 
@@ -70,8 +70,8 @@ class WeatherWidget extends PureComponent {
                     <div className="WW_daily-temp">{this.getTemperatureString(daily.weather.byDaytimes[2])}</div>
                 </div>);
 
-        let daytimes = ['Night', 'Morning', 'Day', 'Evening'];
-        let weatherDuringTheDay = today && today.weather.byDaytimes.map((t, i) =>
+        const daytimes = ['Night', 'Morning', 'Day', 'Evening'];
+        const weatherDuringTheDay = today && today.weather.byDaytimes.map((t, i) =>
             <div key = { Math.random().toString(36).substr(2, 9) } className="WW__during-the-day_row">
                 <span className="WW__during-the-day_name">{daytimes[i]}</span>
                 <span className="WW__during-the-day_temp">
@@ -208,21 +208,21 @@ class WeatherWidget extends PureComponent {
 
     getDateString = (date) => {
 
-        let month = ['January','February','March','April','May','June','July','August','September','October','November','December'],
+        const month = ['January','February','March','April','May','June','July','August','September','October','November','December'],
             week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
         return `${week[date.getDay()]}, ${month[date.getMonth()]} ${this.getNumberWithSuffix(date.getUTCDate())} ${date.getFullYear()}`;
     };
 
     getNumberWithSuffix = (n) => {
-        let s = ["th","st","nd","rd"],
+        const s = ["th","st","nd","rd"],
             v=n%100;
 
         return n+(s[(v-20)%10]||s[v]||s[0]);
     };
 
     getNowDateString = () => {
-        let now = new Date();
+        const now = new Date();
         return `${now.getFullYear()}/${ now.getMonth()}/${now.getDate()}`;
     };
 
@@ -250,7 +250,7 @@ class WeatherWidget extends PureComponent {
 
         return new Promise((resolve, reject) => {
 
-            let previousPosition = localStorage.getItem('weatherAppPosition') ? JSON.parse(localStorage.getItem('weatherAppPosition')) : null;
+            const previousPosition = localStorage.getItem('weatherAppPosition') ? JSON.parse(localStorage.getItem('weatherAppPosition')) : null;
 
             if(previousPosition){
 
@@ -331,7 +331,7 @@ class WeatherWidget extends PureComponent {
             .then(results => getLatLng(results[0]))
             .then(position => {
 
-                let addressArr = address.split(', '),
+                const addressArr = address.split(', '),
                     city = addressArr[0],
                     country = addressArr[addressArr.length - 1];
 
@@ -357,7 +357,7 @@ class WeatherWidget extends PureComponent {
     // Switcher
 
     switchTemperatureMode = () => {
-        let newState =  this.state.temperatureMode === 'C' ? 'F' : 'C';
+        const newState =  this.state.temperatureMode === 'C' ? 'F' : 'C';
 
         this.setState({
             temperatureMode: newState
@@ -391,7 +391,7 @@ class WeatherWidget extends PureComponent {
 
     loadWeatherData = (position) => {
 
-        let weatherAppData = localStorage.getItem('weatherAppData') ? JSON.parse(localStorage.getItem('weatherAppData')) : null,
+        const weatherAppData = localStorage.getItem('weatherAppData') ? JSON.parse(localStorage.getItem('weatherAppData')) : null,
             weatherAppPosition = localStorage.getItem('weatherAppPosition') ? JSON.parse(localStorage.getItem('weatherAppPosition')) : null;
 
         if(weatherAppData && weatherAppPosition && weatherAppData.startDate === this.getNowDateString()){
@@ -414,16 +414,16 @@ class WeatherWidget extends PureComponent {
 
         new Promise((resolve, reject) => {
 
-            let xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
 
             // xhr.open('GET', `http://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=${this.props.apiKeys.openWeatherMaps}`, true);
-            xhr.open('GET', `http://api.openweathermap.org/data/2.5/forecast?lat=${position.lat}&lon=${position.lng}&APPID=${this.props.apiKeys.openWeatherMaps}`, true);
+            xhr.open('GET', `https://api.openweathermap.org/data/2.5/forecast?lat=${position.lat}&lon=${position.lng}&APPID=${this.props.apiKeys.openWeatherMaps}`, true);
 
             xhr.onload = function() {
                 if (this.status === 200) {
                     resolve(this.response);
                 } else {
-                    let error = new Error(this.statusText);
+                    const error = new Error(this.statusText);
                     error.code = this.status;
                     reject(error);
                 }
@@ -438,7 +438,7 @@ class WeatherWidget extends PureComponent {
         }).then(
             response => {
 
-                let weatherAppData = this.parseAppData(JSON.parse(response));
+                const weatherAppData = this.parseAppData(JSON.parse(response));
 
                 localStorage.setItem('weatherAppData', JSON.stringify(weatherAppData));
 
@@ -454,10 +454,10 @@ class WeatherWidget extends PureComponent {
 
     parseAppData = (raw_data) => {
 
-        let week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+        const week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
             todayWeekDayNumber = (new Date()).getDay();
 
-        let weatherByDays = raw_data.list
+        const weatherByDays = raw_data.list
 
             // get 20 periods [ [0,1,2], ...etc ]
             .reduce((periods, item, i) => {
@@ -484,12 +484,10 @@ class WeatherWidget extends PureComponent {
             // get days data objects
             .map((day, dayIndex) => {
 
-                let currentWeekDay = todayWeekDayNumber + dayIndex;
-                if(currentWeekDay > 6) currentWeekDay = 0;
+                const currentWeekDay = (todayWeekDayNumber + dayIndex)%7;
+                const currentDescription = day[2][0].weather[0].description;
 
-                let currentDescription = day[2][0].weather[0].description;
-
-                let dayData = {
+                const dayData = {
 
                     weather: {
                         byDaytimes: [0,0,0,0],
@@ -509,7 +507,7 @@ class WeatherWidget extends PureComponent {
 
                     daytime.forEach((threeHours, i) => {
 
-                        let tempInC = Math.round(threeHours.main.temp - 273.15);
+                        const tempInC = Math.round(threeHours.main.temp - 273.15);
 
                         if(i !== 2) dayData.weather.byHours.push({
                             temp: tempInC,
@@ -552,7 +550,7 @@ class WeatherWidget extends PureComponent {
 
     setDayEndTimer = () => {
 
-        let now = new Date();
+        const now = new Date();
 
         setTimeout( () => {
 
@@ -565,8 +563,8 @@ class WeatherWidget extends PureComponent {
 
     sePeriodEndTimer = () => {
 
-        let now = new Date();
-        let nowMilliseconds = 24*60*60*1000 - (new Date(now.getFullYear(), now.getMonth(), now.getDate()+1) - now);
+        const now = new Date();
+        const nowMilliseconds = 24*60*60*1000 - (new Date(now.getFullYear(), now.getMonth(), now.getDate()+1) - now);
 
         setTimeout(() => {
 
