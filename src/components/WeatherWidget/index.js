@@ -3,6 +3,8 @@ import React, {PureComponent} from 'react'
 import iconsDictionary from '../../icons.dictionary';
 
 import PlacesAutocomplete from 'react-places-autocomplete';
+// TODO: [🐱👀] Стиль пробелов в import-ах разный:
+// Выше на с. 1 импорт без пробелов вокруг скобок, а на этой строчке с пробелами.
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
 import './style.css';
@@ -18,6 +20,7 @@ class WeatherWidget extends PureComponent {
         startDate: null,
         weather: null,
 
+        // TODO: [🐱👀] Здесь и на с. 54, 537 `currentDayNumber` всегда 0. Можно избавиться от этой переменной.
         currentDayNumber: null,
         currentDaytimeNumber: null,
 
@@ -31,9 +34,13 @@ class WeatherWidget extends PureComponent {
     componentWillMount() {
 
         let appState = {
+            // TODO: [🐱👀] Здесь и на с. 55, 119, 225, 458, 555, 562, 568, 569
+            // Несколько раз в коде вычисляется `new Date`.
+            // Можно обойтись одной переменной.
             currentDaytimeNumber: Math.floor((new Date()).getHours()/3)
         };
 
+        // TODO: [🐱👀] Два раза читается значение из `localStorage`-а, можно использовать дополнительную переменную.
         if(localStorage.getItem('weatherAppTemperatureMode')){
             appState.temperatureMode = localStorage.getItem('weatherAppTemperatureMode');
         }
@@ -48,7 +55,9 @@ class WeatherWidget extends PureComponent {
     };
 
     render() {
-
+        // TODO: [🐱👀] Здесь и ниже:
+        // Много кода зависит от наличия значения в переменной `weather`.
+        // Было бы проще один раз проверить значение переменной и пойти по default-ветке.
         const weather = this.state.weather;
 
         const today = weather && weather[this.state.currentDayNumber],
@@ -62,6 +71,11 @@ class WeatherWidget extends PureComponent {
         const weatherList = weather && weather
             .map(daily =>
                 <div key = { Math.random().toString(36).substr(2, 9) } className="WW_cell WW_cell__daily">
+                    {   //        ↑↑↑↑↑↑↑↑
+                        // TODO: [🐱👀] Вместо random-ных ключей можно использовать индексы.
+                        // Ключ, полученный с помощью операции `random` мешает реконсайлеру.
+                        // https://reactjs.org/docs/lists-and-keys.html#keys
+                    }
 
                     <div className="WW_daily-weekday">{daily.weekDay}</div>
 
@@ -80,6 +94,7 @@ class WeatherWidget extends PureComponent {
             </div>
         );
 
+        // TODO: [🐱👀] Зачем так?
         if(weatherDuringTheDay)weatherDuringTheDay.push(weatherDuringTheDay.shift());
 
         return (
@@ -91,9 +106,18 @@ class WeatherWidget extends PureComponent {
 
                         <div className="WW_cell WW_cell__city">
 
+                            {
+                                // TODO: [🐱👀] `.bind` вернет копию функции, а не оригинальную функцию.
+                                // Это сделает невозможным оптимизацию производительности с помощью `PureComponent`-ов.
+                                // Рекомендую каждый раз использовать при-bind-енный метод.
+                                // https://medium.freecodecamp.org/the-best-way-to-bind-event-handlers-in-react-282db2cf1530
+                            }
                             <div className="WW_city-change" onClick={this.citySelectShow.bind(this)}> </div>
 
                             <span className="WW_city-name">
+                            {
+                                // TODO: [🐱👀] Шаблон здесь избыточен, `{this.state.city}, {this.state.country}` — будет в самый раз.
+                            }
                             {`${this.state.city}, ${this.state.country}`}
                         </span>
 
@@ -112,6 +136,20 @@ class WeatherWidget extends PureComponent {
 
                     </div>
 
+                    {
+                        // TODO: [🐱👀] Здесь и в похожих местах выводится `undefined`. Более корректно писать так, чтобы не было пустых блоков в разметке:
+                        // ``` javascript
+                        // {
+                        //   weatherDuringTheDay && (
+                        //     <div className=“WW_cell WW_cell__during-the-day”>
+                        //       {
+                        //         weatherDuringTheDay
+                        //       }
+                        //     </div>
+                        //   )
+                        // }
+                        // ```
+                    }
                     <div className="WW_row">
                         <div className="WW_cell WW_cell__full">
 
@@ -205,10 +243,13 @@ class WeatherWidget extends PureComponent {
     }
 
     // Helpers //
-
+    // TODO: [🐱👀] Код для работы с датами может быть заменен на хорошо известные и проверенные библиотеки для работы со временем:
+    // http://momentjs.com/
+    // https://date-fns.org/
     getDateString = (date) => {
 
         const month = ['January','February','March','April','May','June','July','August','September','October','November','December'],
+            // TODO: [🐱👀] Здесь и на с 457 Дублирование определений дней недели.
             week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
         return `${week[date.getDay()]}, ${month[date.getMonth()]} ${this.getNumberWithSuffix(date.getUTCDate())} ${date.getFullYear()}`;
@@ -240,6 +281,7 @@ class WeatherWidget extends PureComponent {
                 (resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject)
             )
         } else {
+            // TODO: [🐱👀] Здесь можно использовать `Promise.resolve({})`.
             return new Promise(
                 resolve => resolve({})
             )
@@ -288,10 +330,12 @@ class WeatherWidget extends PureComponent {
                             resolve( newPosition );
 
                         } else {
+                            // TODO: [🐱👀] Ошибки нигде не обрабатываются.
                             reject(["address not found", results]);
                         }
 
                     } else {
+                        // TODO: [🐱👀] Ошибки нигде не обрабатываются.
                         reject(["request error", status]);
                     }
 
@@ -335,6 +379,7 @@ class WeatherWidget extends PureComponent {
                     city = addressArr[0],
                     country = addressArr[addressArr.length - 1];
 
+                // TODO: [🐱👀] c. 345 Дублирование одного объекта.
                 localStorage.setItem('weatherAppPosition', JSON.stringify({
                     ...position,
                     city,
@@ -377,6 +422,10 @@ class WeatherWidget extends PureComponent {
             .then(
                 position => this.loadWeatherData(position),
                 err => {
+                    // TODO: [🐱👀] Здесь я затрудняюсь в интерпретации;
+                    // С одной стороны, обработчик, судя по тексту ошибки, использован верно, он действительно выведет ошибку если геолокация недоступна.
+                    // Однако, не понятно, ожидал ли автор что обработчик `err => ..` не вызовется, если исключение возникнет при исполнении `position =>`.
+                    // Если не ожидал, то это ошибка.
                     console.warn('Geolocation disabled', err);
 
                     this.setState({
@@ -414,6 +463,9 @@ class WeatherWidget extends PureComponent {
 
         new Promise((resolve, reject) => {
 
+            // TODO: [🐱👀] Ручную работу с `XMLHttpRequest` можно заменить на новое Fetch API или axios от нашего соотечественника.
+            // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+            // https://github.com/axios/axios
             const xhr = new XMLHttpRequest();
 
             // xhr.open('GET', `http://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=${this.props.apiKeys.openWeatherMaps}`, true);
@@ -452,6 +504,8 @@ class WeatherWidget extends PureComponent {
         );
     };
 
+    // TODO: [🐱👀] Не увидел через отладчик, что информация запрашивается повторно.
+    // В требованиях была такая строчка: "but in background, app should ask about new data"
     parseAppData = (raw_data) => {
 
         const week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
@@ -462,6 +516,9 @@ class WeatherWidget extends PureComponent {
             // get 20 periods [ [0,1,2], ...etc ]
             .reduce((periods, item, i) => {
 
+                // TODO: [🐱👀] Насколько я понял, прогнав код через дебагер, эта функция раскладывает массив периодов на массив троек.
+                // При этом последний элемент каждой тройки совпадает с первым элементом следующей за ней тройкой.
+                // Не понятно, зачем так.
                 periods[periods.length-1].push(item);
 
                 if(!(i%2) && i) periods.push([item]);
@@ -475,6 +532,7 @@ class WeatherWidget extends PureComponent {
 
                 days[days.length-1].push(item);
 
+                // TODO: [🐱👀] Не понятно, что делает и зачем этот код:
                 if(!((i+1)%(this.state.daysNumber-1)) && i !== arr.length-1) days.push([]);
 
                 return days;
@@ -485,6 +543,8 @@ class WeatherWidget extends PureComponent {
             .map((day, dayIndex) => {
 
                 const currentWeekDay = (todayWeekDayNumber + dayIndex)%7;
+                // TODO: [🐱👀] Понятно, почему такой выбор — нужно взять погоду в середине дня.
+                // Более точно было бы взять погоду за текущий период.
                 const currentDescription = day[2][0].weather[0].description;
 
                 const dayData = {
@@ -503,6 +563,7 @@ class WeatherWidget extends PureComponent {
 
                 day.forEach((daytime, dayTimeIndex) => {
 
+                    
                     let daytimeTemp = 0;
 
                     daytime.forEach((threeHours, i) => {
@@ -516,7 +577,7 @@ class WeatherWidget extends PureComponent {
 
                         daytimeTemp += tempInC;
 
-                    }, 0);
+                    }, 0); // TODO: [🐱👀] видимо, раньше на 506-й был `.reduce` )
 
                     dayData.weather.byDaytimes[dayTimeIndex] = Math.round(daytimeTemp/3);
 
@@ -525,8 +586,8 @@ class WeatherWidget extends PureComponent {
                 return dayData;
 
             });
-
-        console.log(weatherByDays);
+        
+        console.log(weatherByDays); // TODO: [🐱👀] Лишний `console.log`
 
         return {
 
@@ -561,6 +622,7 @@ class WeatherWidget extends PureComponent {
 
     };
 
+    // TODO: [🐱👀] Наверное, имелось в виду `setPeriodEndTimer`
     sePeriodEndTimer = () => {
 
         const now = new Date();
